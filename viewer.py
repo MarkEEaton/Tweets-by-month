@@ -10,14 +10,15 @@ auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
 api = tweepy.API(auth)
 
-# create the lists that will contain the data
+# assign a twitter user and create the lists that will contain the data
+twitterid = "kbcclibrary"
 tweets2014 = []
 tweets2015 = []
 tweets2016 = []
 
 # make the API call and sort the data by year
 for tweet in tweepy.Cursor(api.user_timeline, include_rts=True,
-                           id="kbcclibrary").items():
+                           id=twitterid).items():
     if tweet.created_at.year == 2016:
         tweets2016.append(tweet.created_at)
         print(tweet.created_at)
