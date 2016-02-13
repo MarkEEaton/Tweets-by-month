@@ -1,8 +1,10 @@
 #!usr/bin/env python
 
 import tweepy
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.axis as axis
 from credentials import *
 
 # get API connection set up
@@ -23,7 +25,7 @@ for tweet in tweepy.Cursor(api.user_timeline, include_rts=True,
 df = pd.DataFrame(data=tweets)
 df = df.groupby([0, 1]).size()
 
-years = range(2006, 2016)
+years = range(2006, 2017)
 months = range(1, 13)
 
 for year in years:
@@ -38,13 +40,14 @@ for year in years:
     if df.sum(level=0)[year] == 0:
         df.drop(year, inplace=True)
         
-df.sort_values()
+df.sort_index(inplace=True)
 
 ax = df.plot(kind='bar', title='Tweets per month')
 
 # name the axes and ticks
 ax.set_xlabel('months')
 ax.set_ylabel('tweets')
+plt.xticks( np.arange(0, len(df), 1)[::12] )
 
-# show the chart
+# show thechart
 plt.show()
