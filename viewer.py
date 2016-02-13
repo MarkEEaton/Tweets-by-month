@@ -47,7 +47,9 @@ ax = df.plot(kind='bar', title='Tweets per month')
 # name the axes and ticks
 ax.set_xlabel('months')
 ax.set_ylabel('tweets')
-plt.xticks( np.arange(0, len(df), 1)[::12] )
+plt.xticks( np.arange(0, len(df), 1) )
+plt.setp(ax.get_xticklabels(), visible=False)
+plt.setp(ax.get_xticklabels()[::12], visible=True)
 
 # show thechart
 plt.show()
