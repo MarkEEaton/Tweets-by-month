@@ -23,6 +23,22 @@ for tweet in tweepy.Cursor(api.user_timeline, include_rts=True,
 df = pd.DataFrame(data=tweets)
 df = df.groupby([0, 1]).size()
 
+years = range(2006, 2016)
+months = range(1, 13)
+
+for year in years:
+    for month in months:
+        print year, month
+        try:
+            df[year, month]
+        except IndexError and KeyError:
+            df.loc[year, month] = 0
+        else:
+            pass
+    if df.sum(level=0)[year] == 0:
+        df.drop(year, inplace=True)
+        
+df.sort_values()
 
 ax = df.plot(kind='bar', title='Tweets per month')
 
