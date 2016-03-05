@@ -4,6 +4,7 @@ import tweepy
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import sys
 from credentials import *
 
 # get API connection set up
@@ -11,8 +12,11 @@ auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
 api = tweepy.API(auth)
 
+if len(sys.argv) != 2:
+    sys.exit('Usage: python viewer.py <username>')
+
 # assign a twitter user
-twitterid = "ocertat"
+twitterid = sys.argv[1] 
 
 # make the API call and sort the data by year
 tweets = []
