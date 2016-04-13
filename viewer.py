@@ -1,11 +1,14 @@
 #!usr/bin/env python
 
+from datetime import date
 import tweepy
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import sys
 from credentials import *
+
+print "wait..."
 
 # get API connection set up
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
@@ -20,7 +23,6 @@ twitterid = sys.argv[1]
 
 # make the API call and sort the data by year
 tweets = []
-print "wait..."
 for tweet in tweepy.Cursor(api.user_timeline, include_rts=True,
                            id=twitterid).items():
     tweets.append((tweet.created_at.year, tweet.created_at.month))
@@ -29,7 +31,7 @@ for tweet in tweepy.Cursor(api.user_timeline, include_rts=True,
 df = pd.DataFrame(data=tweets)
 df = df.groupby([0, 1]).size()
 
-years = range(2006, 2017)
+years = range(2006, date.today().year + 1)
 months = range(1, 13)
 
 # for months without a value, add a zero value
