@@ -50,7 +50,7 @@ for year in years:
 
 # sort the data; set the chart type
 df = df.sort_index()
-ax = df.plot(kind='bar', title='Tweets per month')
+ax = df.plot(kind='bar', title='Tweets per month by: '+ twitterid)
 
 # name the axes and ticks
 ax.set_xlabel('months')
