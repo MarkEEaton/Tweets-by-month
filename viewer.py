@@ -1,5 +1,7 @@
 #!usr/bin/env python
 
+print "loading libraries..."
+
 from datetime import date
 import tweepy
 import numpy as np
@@ -8,7 +10,7 @@ import matplotlib.pyplot as plt
 import sys
 from credentials import *
 
-print "wait..."
+print "setting up the api call..."
 
 # get API connection set up
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
@@ -21,12 +23,15 @@ if len(sys.argv) != 2:
 # assign a twitter user
 twitterid = sys.argv[1] 
 
+print "fetching data..."
+
 # make the API call and sort the data by year
 tweets = []
 for tweet in tweepy.Cursor(api.user_timeline, include_rts=True,
                            id=twitterid).items():
     tweets.append((tweet.created_at.year, tweet.created_at.month))
 
+print "processing data..."
 # create the DataFrame
 df = pd.DataFrame(data=tweets)
 df = df.groupby([0, 1]).size()
@@ -37,7 +42,6 @@ months = range(1, 13)
 # for months without a value, add a zero value
 for year in years:
     for month in months:
-        print year, month
         try:
             df[year, month]
         except IndexError and KeyError:
