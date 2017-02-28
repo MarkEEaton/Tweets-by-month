@@ -1,6 +1,6 @@
 #!usr/bin/env python
 
-print "loading libraries..."
+print("loading libraries...")
 
 from datetime import date
 import tweepy
@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import sys
 from credentials import *
 
-print "setting up the api call..."
+print("setting up the api call...")
 
 # get API connection set up
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
@@ -23,7 +23,7 @@ if len(sys.argv) != 2:
 # assign a twitter user
 twitterid = sys.argv[1] 
 
-print "fetching data..."
+print("fetching data...")
 
 # make the API call and sort the data by year
 tweets = []
@@ -31,7 +31,7 @@ for tweet in tweepy.Cursor(api.user_timeline, include_rts=True,
                            id=twitterid).items():
     tweets.append((tweet.created_at.year, tweet.created_at.month))
 
-print "processing data..."
+print("processing data...")
 # create the DataFrame
 df = pd.DataFrame(data=tweets)
 df = df.groupby([0, 1]).size()
@@ -54,7 +54,7 @@ for year in years:
 
 # sort the data; set the chart type
 df = df.sort_index()
-ax = df.plot(kind='bar', title='Tweets per month by: '+ twitterid)
+ax = df.plot(kind='bar', width=1, title='Tweets per month by: '+ twitterid)
 
 # name the axes and ticks
 ax.set_xlabel('months')
