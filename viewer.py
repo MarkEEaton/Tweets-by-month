@@ -25,42 +25,46 @@ twitterid = sys.argv[1]
 
 print("fetching data...")
 
-# make the API call and sort the data by year
-tweets = []
-for tweet in tweepy.Cursor(api.user_timeline, include_rts=True,
-                           id=twitterid).items():
-    tweets.append((tweet.created_at.year, tweet.created_at.month))
+def main():
+    # make the API call and sort the data by year
+    tweets = []
+    for tweet in tweepy.Cursor(api.user_timeline, include_rts=True,
+                               id=twitterid).items():
+        tweets.append((tweet.created_at.year, tweet.created_at.month))
 
-print("processing data...")
-# create the DataFrame
-df = pd.DataFrame(data=tweets)
-df = df.groupby([0, 1]).size()
+    print("processing data...")
+    # create the DataFrame
+    df = pd.DataFrame(data=tweets)
+    df = df.groupby([0, 1]).size()
 
-years = range(2006, date.today().year + 1)
-months = range(1, 13)
+    years = range(2006, date.today().year + 1)
+    months = range(1, 13)
 
-# for months without a value, add a zero value
-for year in years:
-    for month in months:
-        try:
-            df[year, month]
-        except IndexError and KeyError:
-            df.loc[year, month] = 0
-        else:
-            pass
-# exclude years where all months are zero
-    if df.sum(level=0)[year] == 0:
-        df.drop(year, inplace=True)
+    # for months without a value, add a zero value
+    for year in years:
+        for month in months:
+            try:
+                df[year, month]
+            except IndexError and KeyError:
+                df.loc[year, month] = 0
+            else:
+                pass
+    # exclude years where all months are zero
+        if df.sum(level=0)[year] == 0:
+            df.drop(year, inplace=True)
 
-# sort the data; set the chart type
-df = df.sort_index()
-ax = df.plot(kind='bar', width=1, title='Tweets per month by: '+ twitterid)
+    # sort the data; set the chart type
+    df = df.sort_index()
+    ax = df.plot(kind='bar', width=1, title='Tweets per month by: '+ twitterid)
 
-# name the axes and ticks
-ax.set_xlabel('months')
-ax.set_ylabel('tweets')
-plt.xticks(np.arange(0, len(df), 12),
-           range(df.index[0][0], df.index[len(df) - 1][0] + 1, 1))
+    # name the axes and ticks
+    ax.set_xlabel('months')
+    ax.set_ylabel('tweets')
+    plt.xticks(np.arange(0, len(df), 12),
+               range(df.index[0][0], df.index[len(df) - 1][0] + 1, 1))
 
-# show thechart
-plt.show()
+    # show thechart
+    plt.show()
+
+if __name__ == '__main__':
+    main()
